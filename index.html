@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu du pendu</title>
+    <style>
+        table {
+            border-collapse: collapse; 
+        }
+        .cell {
+            width: 30px; 
+            height: 30px; 
+            border: 1px solid black; 
+            text-align: center; 
+            vertical-align: middle; 
+            font-size: 24px; 
+            font-family: Arial, sans-serif; 
+        }
+        #motARemplir {
+            margin-top: 30px;
+            font-size: 24px; 
+            letter-spacing: 10px;
+            display: flex;
+            justify-content: center;
+        }
+        #winnerMessage {
+            margin-top: 20px;
+            font-size: 24px;
+            color: green;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="motARemplir"></div>
+    <br>
+    <table>
+        <tr>
+            <td class="cell" id="cellule0"></td>
+            <td class="cell" id="cellule1"></td>
+            <td class="cell" id="cellule2"></td>
+            <td class="cell" id="cellule3"></td>
+            <td class="cell" id="cellule4"></td>
+            <td class="cell" id="cellule5"></td>
+            <td class="cell" id="cellule6"></td>
+            <td class="cell" id="cellule7"></td>
+            <td class="cell" id="cellule8"></td>
+            <td class="cell" id="cellule9"></td>
+            <td class="cell" id="cellule10"></td>
+            <td class="cell" id="cellule11"></td>
+            <td class="cell" id="cellule12"></td>
+            <td class="cell" id="cellule13"></td>
+            <td class="cell" id="cellule14"></td>
+            <td class="cell" id="cellule15"></td>
+            <td class="cell" id="cellule16"></td>
+            <td class="cell" id="cellule17"></td>
+            <td class="cell" id="cellule18"></td>
+            <td class="cell" id="cellule19"></td>
+            <td class="cell" id="cellule20"></td>
+            <td class="cell" id="cellule21"></td>
+            <td class="cell" id="cellule22"></td>
+            <td class="cell" id="cellule23"></td>
+            <td class="cell" id="cellule24"></td>
+            <td class="cell" id="cellule25"></td>
+        </tr>
+    </table>
+    <div id="winnerMessage"></div>
+
+
+
+    <!-- fetch API https://trouve-mot.fr/api/random  --> 
+    <script>
+        var motARechercher = ""; 
+        var motARemplir = ""; 
+        var lettresAJouer = []; 
+        var nbCoupsRestants = 6;// decrementé 
+
+
+        /**
+        * Initialize 
+        */
+        function initialiser() {
+            let nbLettres = motARechercher.length;
+            console.log(nbLettres)
+            for (let i=0; i<nbLettres; i++) {
+                motARemplir += "-"; 
+            }
+            console.log("mot a remplir : " + motARemplir)
+
+            lettresAJouer = 'abcdefghijklmnopqrstuvwxyz'.split('');
+            console.log(lettresAJouer)
+
+            let index = 0; 
+            let lettre = document.getElementById('cellule' +index); 
+
+            for (let element of lettresAJouer) {
+                index ++;
+                lettre.addEventListener('click', ()=> {
+                selection(element)});
+                lettre = document.getElementById('cellule' +index); 
+            }
+        }
+
+        /**
+        * Get a random word from an API 
+        */
+        async function chercherMot() {
+            const reponse = await fetch("https://trouve-mot.fr/api/random");
+            const mot = await reponse.json();
+            console.log("mot a chercher : " + mot[0].name);
+            motARechercher = mot[0].name; 
+            
+            initialiser(); 
+            displayGame();
+        }
+     
+        chercherMot(); 
+
+        // TO DO : corriger string pas tableau motARechercher 
+        // faire le test fin du jeu : gagnant ou perdu 
+        function fillLetter(lettre) {
+            let motARechercherArray = motARechercher.split('');
+            let motARemplirArray = motARemplir.split('');
+
+            for (let i = 0; i < motARechercherArray.length; i++) {
+                if (motARechercherArray[i] == lettre && motARemplirArray[i] == '-') {
+                    console.log("mot a remplir avant remplacement: ", motARemplirArray[i]);
+                    console.log("mot a chercher : ", motARechercherArray[i]);
+                    motARemplirArray[i] = motARechercherArray[i];
+                    console.log("mot a remplir après remplacement: ", motARemplirArray[i]);
+                }
+            }
+
+            // update the word 
+            motARemplir = motARemplirArray.join('');
+            DisplayWinner(motARemplir)
+        }
+
+        /**
+        * Display the winner 
+        */
+        function DisplayWinner(motARemplir) {
+            if (motARemplir === motARechercher) {
+                document.getElementById('winnerMessage').textContent = "Gagné !";
+            }
+        }
+        
+        /**
+        * Select a letter 
+        */
+        function selection(lettre) {
+            console.log("lettre ici :",lettre)
+            nbCoupsRestants --;
+            let position = lettre.charCodeAt(0 )-"a".charCodeAt(0);
+            console.log("position" , position)
+            lettresAJouer[position] = "";
+
+            fillLetter(lettre)
+            console.log("mot à remplir ici: ", motARemplir)
+            displayGame();
+        }
+        
+        /**
+        * Display the grid 
+        */
+        function displayGame() {
+            const divMotARemplir = document.getElementById('motARemplir');
+            divMotARemplir.innerText = motARemplir ; 
+
+            let index = 0; 
+            let lettre = document.getElementById('cellule'+index); 
+
+            for (let element of lettresAJouer) {
+                index ++;
+                lettre.innerText = element; 
+                lettre = document.getElementById('cellule'+index); 
+            }
+        }
+
+    </script>
+    
+</body>
+</html>
