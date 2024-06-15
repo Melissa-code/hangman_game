@@ -5,68 +5,122 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jeu du pendu</title>
     <style>
+        body {
+            font-size: 24px;
+            font-family: Arial, sans-serif;
+            background-color: #051923;
+            color: white;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        h1 {
+            text-align: center;
+            font-size: 45px;
+        }
+        p {
+            font-size: 18px;
+        }
         table {
             border-collapse: collapse; 
         }
         .cell {
-            width: 30px; 
-            height: 30px; 
-            border: 1px solid black; 
-            text-align: center; 
-            vertical-align: middle; 
-            font-size: 24px; 
-            font-family: Arial, sans-serif; 
+            width: 30px;
+            height: 30px;
+            border: 1px solid white;
+            text-align: center;
+            vertical-align: middle;
+            flex: 1 0 30px;
+            margin: 2px; 
+            cursor: pointer; 
+        }
+        #game {
+            height: 80%;
+            margin: 10px; 
         }
         #motARemplir {
             margin-top: 30px;
-            font-size: 24px; 
-            letter-spacing: 10px;
+            font-size: 25px;
+            letter-spacing: 20px;
             display: flex;
             justify-content: center;
         }
         #winnerMessage {
             margin-top: 20px;
-            font-size: 24px;
-            color: green;
+            color: '#136f63'; /* #d00000*/
             text-align: center;
         }
+
+        @media (max-width: 600px) {
+        h1 {
+            font-size: 35px;
+        }
+        body {
+            font-size: 18px;
+        }
+        .cell {
+            width: 20px;
+            height: 20px;
+            flex: 1 0 20px;
+        }
+        p {
+            font-size: 16px;
+        }
+    }
     </style>
 </head>
 <body>
-    <div id="motARemplir"></div>
-    <br>
-    <table>
-        <tr>
-            <td class="cell" id="cellule0"></td>
-            <td class="cell" id="cellule1"></td>
-            <td class="cell" id="cellule2"></td>
-            <td class="cell" id="cellule3"></td>
-            <td class="cell" id="cellule4"></td>
-            <td class="cell" id="cellule5"></td>
-            <td class="cell" id="cellule6"></td>
-            <td class="cell" id="cellule7"></td>
-            <td class="cell" id="cellule8"></td>
-            <td class="cell" id="cellule9"></td>
-            <td class="cell" id="cellule10"></td>
-            <td class="cell" id="cellule11"></td>
-            <td class="cell" id="cellule12"></td>
-            <td class="cell" id="cellule13"></td>
-            <td class="cell" id="cellule14"></td>
-            <td class="cell" id="cellule15"></td>
-            <td class="cell" id="cellule16"></td>
-            <td class="cell" id="cellule17"></td>
-            <td class="cell" id="cellule18"></td>
-            <td class="cell" id="cellule19"></td>
-            <td class="cell" id="cellule20"></td>
-            <td class="cell" id="cellule21"></td>
-            <td class="cell" id="cellule22"></td>
-            <td class="cell" id="cellule23"></td>
-            <td class="cell" id="cellule24"></td>
-            <td class="cell" id="cellule25"></td>
-        </tr>
-    </table>
-    <div id="winnerMessage"></div>
+    <div class="title">
+        <h1>Jeu du pendu</h1>
+    </div>
+    <div id="game">
+        <p>Veuillez cliquer sur une lettre :</p>
+        <table id="alphabet">
+            <tr>
+                <td class="cell" id="cellule0"></td>
+                <td class="cell" id="cellule1"></td>
+                <td class="cell" id="cellule2"></td>
+                <td class="cell" id="cellule3"></td>
+                <td class="cell" id="cellule4"></td>
+                <td class="cell" id="cellule5"></td>
+                <td class="cell" id="cellule6"></td>
+                <td class="cell" id="cellule7"></td>
+                <td class="cell" id="cellule8"></td>
+                <td class="cell" id="cellule9"></td>
+                <td class="cell" id="cellule10"></td>
+                <td class="cell" id="cellule11"></td>
+                <td class="cell" id="cellule12"></td>
+                <td class="cell" id="cellule13"></td>
+                <td class="cell" id="cellule14"></td>
+                <td class="cell" id="cellule15"></td>
+                <td class="cell" id="cellule16"></td>
+                <td class="cell" id="cellule17"></td>
+                <td class="cell" id="cellule18"></td>
+                <td class="cell" id="cellule19"></td>
+                <td class="cell" id="cellule20"></td>
+                <td class="cell" id="cellule21"></td>
+                <td class="cell" id="cellule22"></td>
+                <td class="cell" id="cellule23"></td>
+                <td class="cell" id="cellule24"></td>
+                <td class="cell" id="cellule25"></td>
+            </tr>
+        </table>
 
+        <br>
+        <div id="motARemplir"></div>
+    </div>
+    
+    <br>
+    <img id="hangmanImg" src="assets/img8.png"/>
+    
+    <br>
+    <div id="winnerMessage"></div>
+    <div id="nbCoupsRestants"></div>
+    <div id="wordToSearch"></div>
+   
 
 
     <!-- fetch API https://trouve-mot.fr/api/random  --> 
@@ -74,9 +128,8 @@
         var motARechercher = ""; 
         var motARemplir = ""; 
         var lettresAJouer = []; 
-        var nbCoupsRestants = 6;// decrementé 
-
-
+        var nbCoupsRestants = 8;
+        
         /**
         * Initialize 
         */
@@ -106,19 +159,24 @@
         * Get a random word from an API 
         */
         async function chercherMot() {
-            const reponse = await fetch("https://trouve-mot.fr/api/random");
-            const mot = await reponse.json();
-            console.log("mot a chercher : " + mot[0].name);
-            motARechercher = mot[0].name; 
-            
+            let reponse;
+            do {
+                reponse = await fetch("https://trouve-mot.fr/api/random");
+                const mot = await reponse.json();
+                console.log("mot a chercher : " + mot[0].name);
+                motARechercher = mot[0].name; 
+              
+            }
+            while (motARechercher.length > 9);
+              
             initialiser(); 
             displayGame();
+           
         }
      
         chercherMot(); 
 
-        // TO DO : corriger string pas tableau motARechercher 
-        // faire le test fin du jeu : gagnant ou perdu 
+       
         function fillLetter(lettre) {
             let motARechercherArray = motARechercher.split('');
             let motARemplirArray = motARemplir.split('');
@@ -143,6 +201,13 @@
         function DisplayWinner(motARemplir) {
             if (motARemplir === motARechercher) {
                 document.getElementById('winnerMessage').textContent = "Gagné !";
+
+            } else {
+                if (nbCoupsRestants == 0) {
+                    document.getElementById('winnerMessage').textContent = "Perdu!";
+                    document.getElementById('wordToSearch').textContent = motARechercher;
+                    
+                }
             }
         }
         
@@ -150,14 +215,21 @@
         * Select a letter 
         */
         function selection(lettre) {
-            console.log("lettre ici :",lettre)
+        
+            if (nbCoupsRestants == 0 || motARemplir == motARechercher) {
+                return;
+            }
             nbCoupsRestants --;
+
+            const imgHangman = document.getElementById('hangmanImg');
+            imgHangman.src = "./assets/img"+nbCoupsRestants+".png";
+
             let position = lettre.charCodeAt(0 )-"a".charCodeAt(0);
             console.log("position" , position)
             lettresAJouer[position] = "";
 
             fillLetter(lettre)
-            console.log("mot à remplir ici: ", motARemplir)
+            
             displayGame();
         }
         
@@ -167,6 +239,8 @@
         function displayGame() {
             const divMotARemplir = document.getElementById('motARemplir');
             divMotARemplir.innerText = motARemplir ; 
+            const nbCoupsRestantsDiv = document.getElementById('nbCoupsRestants');
+            nbCoupsRestantsDiv.innerText = nbCoupsRestants;
 
             let index = 0; 
             let lettre = document.getElementById('cellule'+index); 
