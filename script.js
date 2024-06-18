@@ -25,13 +25,11 @@ function removeAccents(str) {
 function initialise() {
     // Compte le nb de lettres du mot à deviner 
     let nbLettres = motARechercher.length;
-    console.log("Nombre de lettres : " + nbLettres); 
 
     // Remplace les lettres du motARechercher par des tirets - - - - 
     for (let i = 0; i < nbLettres; i++) {
         motARemplir += "-"; 
     }
-    console.log("Mot a remplir : " + motARemplir)
  
     // Initialise les lettres à jouées et l'évènement clic 
     lettresAJouer = 'abcdefghijklmnopqrstuvwxyz'.split(''); //become an array
@@ -81,7 +79,7 @@ async function chercherMot() {
     do {
         reponse = await fetch("https://trouve-mot.fr/api/random");
         const mot = await reponse.json();
-        console.log("mot a chercher : " + mot[0].name);
+        //console.log("mot a chercher : " + mot[0].name);
         motARechercher = removeAccents(mot[0].name); 
     }
     while (motARechercher.length > 7);
@@ -182,7 +180,7 @@ function selection(lettre) {
 
     // Calcule la position de la lettre sélectionnée à partir de a : letter - a
     let position = lettre.charCodeAt(0) - "a".charCodeAt(0);
-    console.log("position de la lettre dans l'alphabet : ", position)
+
     let cell = document.getElementById('cellule' + position);
     if (cell) {
         // Change la couleur de la case sélectionnée 
@@ -213,6 +211,10 @@ function resetGame() {
         index++;
         lettreTd = document.getElementById('cellule' + index);
     }
+
+    const imgHangman = document.getElementById('hangmanImg');
+    imgHangman.style.display = "none"; 
+
     // Nouveau mot de l'API 
     chercherMot(); 
 }
