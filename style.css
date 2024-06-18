@@ -1,0 +1,130 @@
+body {
+    font-size: 24px;
+    font-family: Arial, sans-serif;
+    background-color: #051923;
+    color: white;
+    height: 100vh;
+    margin: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+h1 {
+    text-align: center;
+    font-size: 40px;
+}
+
+img {
+    width: 20vh;
+    height: 20vh;
+    border-radius: 5%;
+    display: none;
+}
+
+table {
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.alphabet-row {
+    display: flex;
+}
+
+.cell {
+    width: 6vh;
+    height: 6vh;
+    border: 1px solid white;
+    text-align: center;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.cell-jouee {
+    background-color: #d6a29e; 
+    color: black;
+}
+
+.itemGame {
+    display: flex;
+    justify-content: center;
+    margin: 3vh 0;
+}
+
+.message, .reset {
+    display: flex;
+    justify-content: center;
+}
+
+.success {
+    background-color: #0f4c5c;  
+}
+
+.error {
+    background-color: #540b0e; 
+}
+
+#game {
+    height: 90%;
+    align-items: center; 
+}
+
+#motARemplir {
+    font-size: 25px;
+    letter-spacing: 20px;
+    display: flex;
+    justify-content: center;
+    width: 100%; 
+    text-align: center;
+}
+
+#hangmanImage {
+    display: flex;
+    justify-content: center;
+}
+
+#winnerMessage {
+    text-align: center;
+    width: 50%;
+    padding: 1rem;
+    border-radius: 5px;
+    color: white;
+    display: none;
+    justify-content: center;
+}
+
+#reset-btn {
+    padding: 2vh;
+    font-size: 18px;
+    border: none;
+    border-radius: 10px;
+    background-color: #faeee7;
+    color: #051923;
+    font-weight: 600;
+}
+
+#reset-btn:hover {
+    background-color: #d6a29e;
+}
+
+
+/* Mobile format */
+
+@media (max-width: 601px) {
+    h1 {
+        font-size: 35px;
+    }
+    body {
+        font-size: 18px;
+    }
+    .cell {
+        width: 4vh;
+        height: 4vh;
+    }
+    .alphabet-row {
+        display: block;
+    }
+}
+
