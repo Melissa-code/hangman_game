@@ -45,7 +45,7 @@ function initialise() {
 }
 
 /**
-* Affiche le jeu
+* Affiche le jeu (code obfuscation)
 */
 function displayGame() {
     // Affiche les lettres de l'alphabet dans le tableau 
