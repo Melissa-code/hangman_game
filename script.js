@@ -105,7 +105,7 @@ function DisplayWinnerOrLooser(motARemplir) {
         winnerMessage.classList.add('success');
         setTimeout(() => {
             winnerMessage.style.display = "none";
-        }, 2000); 
+        }, 3000); 
     } else {
         if (nbCoupsRestants === 0) {
             winnerMessage.style.display = "flex";
@@ -113,7 +113,7 @@ function DisplayWinnerOrLooser(motARemplir) {
             winnerMessage.classList.add('error');
             setTimeout(() => {
                 winnerMessage.style.display = "none";
-            }, 2000); 
+            }, 3000); 
         }
     }
 }
