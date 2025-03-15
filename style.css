@@ -29,6 +29,18 @@ table {
     margin-right: auto;
 }
 
+.title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#hangman-icon {
+    display: inline; 
+    width: 2rem;
+    margin-right: 1rem;
+}
+
 .alphabet-row {
     display: flex;
 }
